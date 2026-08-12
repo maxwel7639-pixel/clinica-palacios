@@ -102,10 +102,37 @@ h1,h2,h3,h4,p{margin:0}
 
 /* ---------- stats ---------- */
 .stats{border-top:1px solid rgba(26,26,26,.09);border-bottom:1px solid rgba(26,26,26,.09);background:var(--cream-2)}
-.stats__grid{max-width:var(--wrap);margin:0 auto;padding:clamp(28px,3.4vw,44px) var(--gutter);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:clamp(24px,3vw,48px)}
-.stat b{display:block;font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);font-weight:400;color:var(--ink);line-height:1}
+.stat b{display:block;font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);font-weight:400;color:var(--ink);line-height:1;white-space:nowrap}
 .stat b i{font-style:normal;color:var(--rose);font-size:.6em}
-.stat span{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);margin-top:10px}
+.stat span{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);margin-top:10px;white-space:nowrap}
+
+/* ---------- marquee ---------- */
+.marquee{
+  --marquee-gap:clamp(30px,4.5vw,72px);
+  --marquee-distance:0px;
+  --marquee-duration:40s;
+  position:relative;overflow:hidden;padding:clamp(28px,3.4vw,44px) 0;
+  /* fade the strip into the band instead of cutting items off hard */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.marquee__track{display:flex;align-items:center;gap:var(--marquee-gap);width:max-content;will-change:transform}
+.marquee.is-running .marquee__track{animation:marquee var(--marquee-duration) linear infinite}
+.marquee:hover .marquee__track,.marquee:focus-within .marquee__track{animation-play-state:paused}
+@keyframes marquee{to{transform:translate3d(calc(-1 * var(--marquee-distance)),0,0)}}
+.marquee__set{display:flex;align-items:center;gap:var(--marquee-gap);margin:0;padding:0 0 0 var(--marquee-gap);list-style:none}
+.marquee__set .stat{flex:0 0 auto;position:relative}
+/* losango separador entre os itens */
+.marquee__set .stat::after{
+  content:"";position:absolute;top:50%;right:calc(var(--marquee-gap) / -2);
+  width:5px;height:5px;margin-top:-2.5px;background:var(--rose);transform:rotate(45deg);opacity:.75
+}
+/* sem marquee (JS desligado ou movimento reduzido): vira faixa estática centrada */
+.marquee:not(.is-running) .marquee__track{width:100%;justify-content:center;flex-wrap:wrap;row-gap:24px}
+.marquee:not(.is-running) .marquee__set{flex-wrap:wrap;justify-content:center;row-gap:24px}
+@media(prefers-reduced-motion:reduce){
+  .marquee.is-running .marquee__track{animation:none}
+}
 
 /* ---------- treatments ---------- */
 .rule{display:flex;align-items:center;gap:18px;margin-top:clamp(44px,5vw,68px)}
@@ -115,7 +142,19 @@ h1,h2,h3,h4,p{margin:0}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(248px,100%),1fr));gap:clamp(14px,1.6vw,22px);margin-top:26px}
 .card{position:relative;height:clamp(320px,34vw,380px);overflow:hidden;background:#ded2c2;border-radius:3px;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
 .card__scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(18,16,14,.88) 0%,rgba(18,16,14,.4) 46%,rgba(18,16,14,0) 78%);pointer-events:none}
-.card__body{position:absolute;left:0;right:0;bottom:0;padding:26px 24px;pointer-events:none}
+.card__body{position:absolute;left:0;right:0;bottom:0;padding:26px 24px;pointer-events:none;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+/* a imagem se move menos que o card: dá paralaxe entre foto e texto */
+.card .slot > img{transition:transform .45s cubic-bezier(.22,1,.36,1)}
+/* brilho que acompanha o cursor */
+.card__glare{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .35s ease;mix-blend-mode:soft-light;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.55),rgba(255,255,255,0) 55%)
+}
+.card.is-tilting .card__glare{opacity:1}
+@media(prefers-reduced-motion:reduce){
+  .card__body,.card .slot > img,.card__glare{transition:none}
+}
 .card__body h3{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.15;color:var(--cream-3)}
 .card__body p{font-weight:300;font-size:13.5px;line-height:1.6;color:rgba(250,246,240,.78);margin-top:10px}
 
@@ -283,7 +322,7 @@ h1,h2,h3,h4,p{margin:0}
     </div>
     <div class="hero__media" data-reveal>
       <div class="hero__frame slot" data-label="Foto principal — recepção ou equipe da clínica">
-        <img src="fotos/hero.webp" width="1200" height="1500" alt="Ambiente da Clínica Palácio, em Osório/RS" fetchpriority="high" />
+        <img src="fotos/hero.webp" data-parallax width="1200" height="1500" alt="Ambiente da Clínica Palácio, em Osório/RS" fetchpriority="high" />
       </div>
       <div class="hero__badge">
         <b>11</b>
@@ -293,13 +332,19 @@ h1,h2,h3,h4,p{margin:0}
   </div>
 </section>
 
-<!-- ============ stats ============ -->
-<section class="stats">
-  <div class="stats__grid" data-reveal>
-    <div class="stat"><b>4,9<i>★</i></b><span>33 avaliações no Google</span></div>
-    <div class="stat"><b>7 mil</b><span>Seguidores no Instagram</span></div>
-    <div class="stat"><b>Equipe</b><span>Profissionais especializadas</span></div>
-    <div class="stat"><b>Centro</b><span>Osório e Litoral Norte</span></div>
+<!-- ============ stats (marquee infinito) ============ -->
+<section class="stats" aria-label="A Clínica Palácio em números">
+  <div class="marquee" data-marquee>
+    <div class="marquee__track">
+      <ul class="marquee__set">
+        <li class="stat"><b>4,9<i>★</i></b><span>33 avaliações no Google</span></li>
+        <li class="stat"><b>7 mil</b><span>Seguidores no Instagram</span></li>
+        <li class="stat"><b>Equipe</b><span>Profissionais especializadas</span></li>
+        <li class="stat"><b>Centro</b><span>Osório e Litoral Norte</span></li>
+        <li class="stat"><b>11</b><span>Especialidades sob o mesmo teto</span></li>
+        <li class="stat"><b>Seg a Sáb</b><span>Agendamento pelo WhatsApp</span></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -313,7 +358,7 @@ h1,h2,h3,h4,p{margin:0}
     </div>
 
     <div class="rule" data-reveal><span>Estética facial e corporal</span></div>
-    <div class="cards" data-reveal data-sticky-stack>
+    <div class="cards" data-reveal data-stagger data-sticky-stack>
       <article class="card" data-tilt>
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — estética facial">
           <img src="fotos/servico-estetica-facial.webp" loading="lazy" alt="Sessão de estética facial na Clínica Palácio" />
@@ -357,7 +402,7 @@ h1,h2,h3,h4,p{margin:0}
     </div>
 
     <div class="rule" data-reveal><span>Beleza e bem-estar</span></div>
-    <div class="cards" data-reveal data-sticky-stack>
+    <div class="cards" data-reveal data-stagger data-sticky-stack>
       <article class="card" data-tilt>
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — massoterapia">
           <img src="fotos/servico-massoterapia.webp" loading="lazy" alt="Sessão de massoterapia" />
@@ -401,7 +446,7 @@ h1,h2,h3,h4,p{margin:0}
     </div>
 
     <div class="rule" data-reveal><span>Saúde</span></div>
-    <div class="cards" data-reveal data-sticky-stack>
+    <div class="cards" data-reveal data-stagger data-sticky-stack>
       <article class="card" data-tilt>
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — nutrição / nutrologia">
           <img src="fotos/servico-nutricao.webp" loading="lazy" alt="Consultório de nutrição da Clínica Palácio" />
@@ -446,7 +491,7 @@ h1,h2,h3,h4,p{margin:0}
       </div>
       <p>Esteticistas, biomédica esteta, nutricionista, médica vascular, tricologista, terapeuta integrativa e psicóloga dividem a mesma estrutura. Quando um caso precisa de mais de um olhar, ele tem.</p>
     </div>
-    <div class="team__grid" data-reveal>
+    <div class="team__grid" data-reveal data-stagger>
 
       <div class="member">
         <div class="member__frame"><div class="member__photo">
@@ -585,7 +630,7 @@ h1,h2,h3,h4,p{margin:0}
       <h2 class="h2">Resultados de quem passou por aqui</h2>
       <p class="lede">Imagens divulgadas com autorização das pacientes. Cada pele e cada corpo responde de um jeito — por isso o protocolo é sempre definido depois da avaliação.</p>
     </div>
-    <div class="results__grid" data-reveal>
+    <div class="results__grid" data-reveal data-stagger>
       <div class="slot" data-label="Antes e depois 1"><img src="fotos/antes-depois-1.jpg" loading="lazy" alt="Resultado antes e depois de tratamento na Clínica Palácio" /></div>
       <div class="slot" data-label="Antes e depois 2"><img src="fotos/antes-depois-2.jpg" loading="lazy" alt="Resultado antes e depois de tratamento na Clínica Palácio" /></div>
       <div class="slot" data-label="Antes e depois 3"><img src="fotos/antes-depois-3.jpg" loading="lazy" alt="Resultado antes e depois de tratamento na Clínica Palácio" /></div>
@@ -636,7 +681,7 @@ h1,h2,h3,h4,p{margin:0}
         <span>4,9 · 33 avaliações no Google</span>
       </a>
     </div>
-    <div class="reviews__grid" data-reveal data-sticky-stack>
+    <div class="reviews__grid" data-reveal data-stagger data-sticky-stack>
       <div class="review"><div class="slot slot--contain" data-label="Print da avaliação do Google 1"><img src="fotos/depoimento-google-1.png" loading="lazy" alt="Avaliação de paciente no Google" /></div></div>
       <div class="review"><div class="slot slot--contain" data-label="Print da avaliação do Google 2"><img src="fotos/depoimento-google-2.png" loading="lazy" alt="Avaliação de paciente no Google" /></div></div>
       <div class="review"><div class="slot slot--contain" data-label="Print da avaliação do Google 3"><img src="fotos/depoimento-google-3.png" loading="lazy" alt="Avaliação de paciente no Google" /></div></div>
@@ -651,7 +696,7 @@ h1,h2,h3,h4,p{margin:0}
       <span class="eyebrow eyebrow--light">Como funciona</span>
       <h2>Três passos até a sua primeira sessão</h2>
     </div>
-    <div class="steps__grid" data-reveal>
+    <div class="steps__grid" data-reveal data-stagger>
       <div class="step">
         <b>01</b>
         <h3>Chama no WhatsApp</h3>
@@ -862,10 +907,27 @@ h1,h2,h3,h4,p{margin:0}
   /* ---- scroll reveal: visibility must never depend on a transition running,
          so every path ends by forcing the revealed state ---- */
   var io = null;
+  // Once an element has arrived, drop the reveal styling entirely: its long
+  // transition and stagger delay would otherwise still be in force and make
+  // the card tilt feel sluggish and late.
+  function settleReveal(el) {
+    setTimeout(function () {
+      el.classList.remove('is-revealing');
+      el.style.transitionDelay = '';
+    }, 1100);
+  }
   function reveal(el) {
     if (!el || el.dataset.revealDone) return;
     el.dataset.revealDone = '1';
     el.classList.add('is-revealed');
+    settleReveal(el);
+    // a staggered grid animates its children, each on its own delay
+    if (el.hasAttribute('data-stagger')) {
+      Array.prototype.forEach.call(el.children, function (c) {
+        c.classList.add('is-revealed');
+        settleReveal(c);
+      });
+    }
     if (io) io.unobserve(el);
   }
   function sweep() {
@@ -877,9 +939,10 @@ h1,h2,h3,h4,p{margin:0}
     });
   }
   function forceVisible() {
-    document.querySelectorAll('[data-reveal]').forEach(function (el) {
+    document.querySelectorAll('[data-reveal],.is-revealing').forEach(function (el) {
       el.dataset.revealDone = '1';
       if (io) io.unobserve(el);
+      el.style.transitionDelay = '';
       el.classList.remove('is-revealing');
       el.classList.add('is-revealed');
     });
@@ -889,8 +952,16 @@ h1,h2,h3,h4,p{margin:0}
     io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) reveal(en.target); });
     }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+    // grids come in one item at a time instead of the whole block at once
+    document.querySelectorAll('[data-stagger]').forEach(function (grid) {
+      Array.prototype.forEach.call(grid.children, function (child, i) {
+        child.classList.add('is-revealing');
+        child.style.transitionDelay = Math.min(i, 7) * 70 + 'ms';
+      });
+    });
     document.querySelectorAll('[data-reveal]').forEach(function (el) {
-      el.classList.add('is-revealing');
+      // a staggered grid must not fade as a block on top of its children
+      if (!el.hasAttribute('data-stagger')) el.classList.add('is-revealing');
       io.observe(el);
     });
     sweep();
@@ -924,22 +995,103 @@ h1,h2,h3,h4,p{margin:0}
     });
   }
 
-  /* ---- pointer tilt on treatment cards ---- */
+  /* ---- 3D tilt on treatment cards: the card rotates, the photo counter-shifts
+         and the caption lifts, so the layers separate in depth ---- */
   function initTilt() {
     document.querySelectorAll('[data-tilt]').forEach(function (el) {
+      var glare = document.createElement('div');
+      glare.className = 'card__glare';
+      el.appendChild(glare);
+      var img = el.querySelector('.slot > img');
+      var body = el.querySelector('.card__body');
+      var frame = null;
+
       el.addEventListener('mousemove', function (e) {
         if (reduceMotion.matches || mobile.matches) return;
-        var r = el.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = 'perspective(1000px) rotateY(' + (px * 6).toFixed(2) + 'deg) rotateX(' + (-py * 6).toFixed(2) + 'deg) translateY(-7px)';
-        el.style.boxShadow = '0 26px 50px rgba(26,26,26,.22)';
+        if (frame) cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(function () {
+          var r = el.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width - 0.5;
+          var py = (e.clientY - r.top) / r.height - 0.5;
+          el.classList.add('is-tilting');
+          el.style.transform = 'perspective(900px) rotateY(' + (px * 9).toFixed(2) + 'deg) rotateX(' + (-py * 9).toFixed(2) + 'deg) translateY(-10px) scale(1.02)';
+          el.style.boxShadow = '0 34px 60px rgba(26,26,26,.28)';
+          if (img) img.style.transform = 'scale(1.08) translate3d(' + (-px * 14).toFixed(1) + 'px,' + (-py * 14).toFixed(1) + 'px,0)';
+          if (body) body.style.transform = 'translate3d(' + (px * 10).toFixed(1) + 'px,' + (py * 6).toFixed(1) + 'px,45px)';
+          glare.style.setProperty('--gx', (50 + px * 100).toFixed(1) + '%');
+          glare.style.setProperty('--gy', (50 + py * 100).toFixed(1) + '%');
+        });
       });
+
       el.addEventListener('mouseleave', function () {
+        if (frame) { cancelAnimationFrame(frame); frame = null; }
+        el.classList.remove('is-tilting');
         el.style.transform = '';
         el.style.boxShadow = '';
+        if (img) img.style.transform = '';
+        if (body) body.style.transform = '';
       });
     });
+  }
+
+  /* ---- marquee: clone the set until the track is wide enough to loop
+         seamlessly, then hand the measured distance to the CSS animation ---- */
+  function initMarquee() {
+    document.querySelectorAll('[data-marquee]').forEach(function (m) {
+      var track = m.querySelector('.marquee__track');
+      var set = m.querySelector('.marquee__set');
+      if (!track || !set) return;
+      if (reduceMotion.matches) return; // stays a static, centred strip
+
+      Array.prototype.slice.call(track.querySelectorAll('.marquee__set')).forEach(function (s, i) {
+        if (i > 0) s.remove();
+      });
+
+      function build() {
+        Array.prototype.slice.call(track.querySelectorAll('.marquee__set')).forEach(function (s, i) {
+          if (i > 0) s.remove();
+        });
+        m.classList.remove('is-running');
+        var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+        var setWidth = set.getBoundingClientRect().width;
+        if (!setWidth) return;
+        var step = setWidth + gap;
+        // enough copies to cover the viewport plus the one that scrolls off
+        var copies = Math.max(2, Math.ceil((m.getBoundingClientRect().width + step) / step) + 1);
+        for (var i = 1; i < copies; i++) {
+          var clone = set.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          track.appendChild(clone);
+        }
+        m.style.setProperty('--marquee-distance', step + 'px');
+        m.style.setProperty('--marquee-duration', Math.max(18, step / 55) + 's'); // constant speed
+        m.classList.add('is-running');
+      }
+
+      build();
+      var t;
+      window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 200); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+    });
+  }
+
+  /* ---- hero photo drifts slower than the page ---- */
+  function initParallax() {
+    var el = document.querySelector('[data-parallax]');
+    if (!el || reduceMotion.matches) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      if (mobile.matches) { el.style.transform = ''; return; }
+      var r = el.parentElement.getBoundingClientRect();
+      var progress = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+      el.style.transform = 'translate3d(0,' + (progress * -26).toFixed(1) + 'px,0) scale(1.06)';
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   }
 
   /* ---- accordion fallback for browsers without exclusive <details name> ---- */
@@ -962,6 +1114,8 @@ h1,h2,h3,h4,p{margin:0}
     initReveal();
     applyStack();
     initTilt();
+    initMarquee();
+    initParallax();
     initFaq();
     window.addEventListener('resize', function () { applyStack(); sweep(); });
   }
