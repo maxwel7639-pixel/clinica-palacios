@@ -62,17 +62,21 @@ Já estão no ar (recuperadas do projeto de design):
 | `fotos/servico-sobrancelha.webp` | Tratamentos › Design de sobrancelha |
 | `fotos/servico-nails.webp` | Tratamentos › Nails e manicure |
 | `fotos/servico-nutricao.webp` | Tratamentos › Nutrição |
+| `fotos/servico-vascular.webp` | Tratamentos › Médica vascular |
+| `fotos/servico-tricologia.webp` | Tratamentos › Tricologia |
+| `fotos/clinica-fachada.webp` | Seção "A clínica" |
 | `fotos/equipe/*.webp` | As 13 profissionais |
 
 Ainda faltam — o site já está preparado, é só salvar o arquivo:
 
 | Arquivo a salvar em `fotos/` | Proporção / tamanho mín. | O que deve ir |
 | --- | --- | --- |
-| `servico-vascular.jpg` | 3:4 · 1000×1350 | Ecodoppler em uso ou consultório da médica vascular |
-| `servico-tricologia.jpg` | 3:4 · 1000×1350 | Avaliação capilar, câmera de tricoscopia, couro cabeludo |
-| `clinica-fachada.jpg` | 1,05:1 · 1400×1330 | Fachada com a placa, ou recepção ampla |
 | `antes-depois-1.jpg` … `antes-depois-6.jpg` | 1:1,16 · 1000×1160 | Montagens antes/depois, **com autorização da paciente** |
 | `depoimento-google-1.png` … `-3.png` | 1,25:1 · 1200×960 | Prints das avaliações reais do Google |
+
+Duas fotos entraram em resolução baixa e vale trocar quando houver original maior:
+`servico-vascular.webp` (223×297, exibida a 399×380) e `servico-tricologia.webp`
+(312×416). O ideal é 1000×1350.
 
 As seções **“Antes e depois”** e **“Depoimentos”** ficam escondidas enquanto nenhuma das suas
 fotos existir, e aparecem sozinhas assim que a primeira imagem for salva. Detalhes de
