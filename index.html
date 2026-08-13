@@ -126,7 +126,6 @@ h1,h2,h3,h4,p{margin:0}
 .marquee.is-measuring .marquee__set,
 .marquee.is-running .marquee__set{justify-content:flex-start;flex-wrap:nowrap;row-gap:0}
 .marquee.is-running .marquee__track{animation:marquee var(--marquee-duration) linear infinite}
-.marquee:hover .marquee__track,.marquee:focus-within .marquee__track{animation-play-state:paused}
 @keyframes marquee{to{transform:translate3d(calc(-1 * var(--marquee-distance)),0,0)}}
 .marquee__set .stat{flex:0 0 auto;position:relative}
 /* losango separador entre os itens */
@@ -1080,7 +1079,15 @@ h1,h2,h3,h4,p{margin:0}
 
       build();
       var t;
-      window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 200); });
+      var lastWidth = window.innerWidth;
+      window.addEventListener('resize', function () {
+        var currentWidth = window.innerWidth;
+        if (currentWidth !== lastWidth) {
+          lastWidth = currentWidth;
+          clearTimeout(t);
+          t = setTimeout(build, 200);
+        }
+      });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
     });
   }
