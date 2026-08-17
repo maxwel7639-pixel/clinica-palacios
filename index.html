@@ -144,8 +144,18 @@ h1,h2,h3,h4,p{margin:0}
 .rule::after{content:"";flex:1;height:1px;background:rgba(26,26,26,.14)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(248px,100%),1fr));gap:clamp(14px,1.6vw,22px);margin-top:26px}
 .card{position:relative;height:clamp(320px,34vw,380px);overflow:hidden;background:#ded2c2;border-radius:3px;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
-.card__scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(18,16,14,.88) 0%,rgba(18,16,14,.4) 46%,rgba(18,16,14,0) 78%);pointer-events:none}
-.card__body{position:absolute;left:0;right:0;bottom:0;padding:26px 24px;pointer-events:none;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+/* escurecimento mais alto que o original: o card agora carrega também o CTA */
+.card__scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(18,16,14,.93) 0%,rgba(18,16,14,.66) 34%,rgba(18,16,14,.28) 62%,rgba(18,16,14,0) 88%);pointer-events:none}
+.card__body{position:absolute;left:0;right:0;bottom:0;padding:24px;pointer-events:none;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.card__cta{
+  display:inline-flex;align-items:center;gap:9px;margin-top:16px;padding:11px 18px;
+  border:1px solid rgba(250,246,240,.5);border-radius:2px;color:var(--cream-3);
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;
+  pointer-events:auto; /* o corpo do card ignora o ponteiro; o botão não pode */
+  transition:background .3s ease,color .3s ease,border-color .3s ease
+}
+.card__cta:hover,.card__cta:focus-visible{background:var(--rose);border-color:var(--rose);color:var(--ink)}
+.card__cta svg{flex:0 0 auto}
 /* a imagem se move menos que o card: dá paralaxe entre foto e texto */
 .card .slot > img{transition:transform .45s cubic-bezier(.22,1,.36,1)}
 /* brilho que acompanha o cursor */
@@ -362,7 +372,7 @@ h1,h2,h3,h4,p{margin:0}
 
     <div class="rule" data-reveal><span>Estética facial e corporal</span></div>
     <div class="cards" data-reveal data-stagger data-sticky-stack>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma avaliação de estética facial (limpeza de pele, peeling ou rejuvenescimento).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — estética facial">
           <img src="fotos/servico-estetica-facial.webp" loading="lazy" alt="Sessão de estética facial na Clínica Palácio" />
         </div>
@@ -370,9 +380,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Estética facial</h3>
           <p>Limpeza de pele, peelings, alta frequência e protocolos de rejuvenescimento.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma avaliação de estética corporal (drenagem, criolipólise ou gordura localizada).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — estética corporal">
           <img src="fotos/servico-estetica-corporal.webp" loading="lazy" alt="Atendimento de estética corporal na Clínica Palácio" />
         </div>
@@ -380,9 +391,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Estética corporal</h3>
           <p>Drenagem, criolipólise e protocolos para gordura localizada e flacidez.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma avaliação de harmonização facial.">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — harmonização facial">
           <img src="fotos/servico-harmonizacao-facial.webp" loading="lazy" alt="Procedimento de harmonização facial" />
         </div>
@@ -390,9 +402,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Harmonização facial</h3>
           <p>Planejamento com simulação prévia e resultado natural, respeitando suas proporções.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de saber sobre depilação a laser e tratamento de manchas e vasinhos.">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — laser">
           <img src="fotos/servico-laser.webp" loading="lazy" alt="Sessão de laser na Clínica Palácio" />
         </div>
@@ -400,13 +413,14 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Laser</h3>
           <p>Depilação a laser e tratamento de manchas, vasinhos e textura da pele.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
     </div>
 
     <div class="rule" data-reveal><span>Beleza e bem-estar</span></div>
     <div class="cards" data-reveal data-stagger data-sticky-stack>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma sessão de massoterapia (relaxante, modeladora ou drenagem linfática).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — massoterapia">
           <img src="fotos/servico-massoterapia.webp" loading="lazy" alt="Sessão de massoterapia" />
         </div>
@@ -414,9 +428,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Massoterapia</h3>
           <p>Massagem relaxante, modeladora, drenagem linfática e pós-operatório.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma sessão de terapia integrativa (acupuntura, ventosaterapia ou auriculoterapia).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — terapia integrativa">
           <img src="fotos/servico-terapia-chinesa.webp" loading="lazy" alt="Sessão de acupuntura e terapias integrativas" />
         </div>
@@ -424,9 +439,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Terapia chinesa e integrativa</h3>
           <p>Acupuntura, ventosaterapia e auriculoterapia para equilíbrio, dor e ansiedade.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar um design de sobrancelha.">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — design de sobrancelha">
           <img src="fotos/servico-sobrancelha.webp" loading="lazy" alt="Design de sobrancelha na Clínica Palácio" />
         </div>
@@ -434,9 +450,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Design de sobrancelha</h3>
           <p>Design personalizado, henna e acabamento sob medida para o seu rosto.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar um horário de manicure/nails.">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — nails / manicure">
           <img src="fotos/servico-nails.webp" loading="lazy" alt="Unhas finalizadas em esmaltação em gel" />
         </div>
@@ -444,13 +461,14 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Nails e manicure</h3>
           <p>Manicure, pedicure, alongamento e esmaltação em gel com acabamento impecável.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
     </div>
 
     <div class="rule" data-reveal><span>Saúde</span></div>
     <div class="cards" data-reveal data-stagger data-sticky-stack>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma consulta de nutrição.">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — nutrição / nutrologia">
           <img src="fotos/servico-nutricao.webp" loading="lazy" alt="Consultório de nutrição da Clínica Palácio" />
         </div>
@@ -458,9 +476,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Nutrição e nutrologia</h3>
           <p>Avaliação, plano alimentar individual e acompanhamento de perto.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma consulta com a médica vascular (Ecodoppler / varizes).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — médica vascular / Ecodoppler">
           <img src="fotos/servico-vascular.webp" loading="lazy" alt="Consulta com médica vascular e Ecodoppler" />
         </div>
@@ -468,9 +487,10 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Médica vascular</h3>
           <p>Consulta com Ecodoppler na própria clínica e tratamento de varizes.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
-      <article class="card" data-tilt>
+      <article class="card" data-tilt data-wa-msg="Olá! Vim pelo site da Clínica Palácio e gostaria de agendar uma avaliação capilar (tricologia).">
         <div class="slot" style="position:absolute;inset:0" data-label="Foto — tricologia">
           <img src="fotos/servico-tricologia.webp" loading="lazy" alt="Avaliação capilar e tricoscopia" />
         </div>
@@ -478,6 +498,7 @@ h1,h2,h3,h4,p{margin:0}
         <div class="card__body">
           <h3>Tricologia</h3>
           <p>Diagnóstico capilar e protocolos para queda, oleosidade e saúde do couro cabeludo.</p>
+          <a class="card__cta" data-wa-cta href="#" target="_blank" rel="noopener"><span>Agendar sessão</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3.5 21l1.8-5.3A8.5 8.5 0 1 1 21 11.5Z"></path></svg></a>
         </div>
       </article>
     </div>
@@ -857,10 +878,20 @@ h1,h2,h3,h4,p{margin:0}
   /* ---- links ---- */
   function applyLinks() {
     var digits = String(CONFIG.whatsapp).replace(/\D/g, '');
-    var wa = 'https://wa.me/' + digits + '?text=' + encodeURIComponent(CONFIG.whatsappMessage);
-    var map = { '[data-wa]': wa, '[data-ig]': CONFIG.instagram, '[data-maps]': CONFIG.maps };
+    function wa(message) {
+      return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(message);
+    }
+    var map = { '[data-wa]': wa(CONFIG.whatsappMessage), '[data-ig]': CONFIG.instagram, '[data-maps]': CONFIG.maps };
     Object.keys(map).forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (a) { a.href = map[sel]; });
+    });
+    // each treatment card opens WhatsApp already naming its own service
+    document.querySelectorAll('[data-wa-cta]').forEach(function (a) {
+      var card = a.closest('.card');
+      var msg = (card && card.getAttribute('data-wa-msg')) || CONFIG.whatsappMessage;
+      var name = card && card.querySelector('h3');
+      a.href = wa(msg);
+      if (name) a.setAttribute('aria-label', 'Agendar ' + name.textContent.trim() + ' pelo WhatsApp');
     });
   }
 
@@ -1050,23 +1081,36 @@ h1,h2,h3,h4,p{margin:0}
         if (i > 0) s.remove();
       });
 
+      var builtStep = 0;
+
       function build() {
-        Array.prototype.slice.call(track.querySelectorAll('.marquee__set')).forEach(function (s, i) {
-          if (i > 0) s.remove();
-        });
-        m.classList.remove('is-running');
         // Measure in the single-line layout the animation will actually use.
         // Measuring in the wrapped fallback layout reports the viewport width
         // instead of the real set width, which shortens the loop badly on
         // narrow screens — the strip creeps forward and snaps back.
+        // `set` is the original, so the clones do not affect its width and we
+        // can measure without tearing the track down first.
         m.classList.add('is-measuring');
         var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
         var setWidth = set.getBoundingClientRect().width;
+        var viewWidth = m.getBoundingClientRect().width;
         m.classList.remove('is-measuring');
         if (!setWidth) return;
+
         var step = setWidth + gap;
+        // Rebuilding restarts the animation from zero, so only do it when the
+        // geometry genuinely changed. Mobile browsers fire resize every time
+        // the URL bar slides away during a scroll gesture; rebuilding on those
+        // would reset the strip mid-travel on every swipe.
+        if (builtStep && Math.abs(step - builtStep) < 1 && track.children.length > 1) return;
+        builtStep = step;
+
+        m.classList.remove('is-running');
+        Array.prototype.slice.call(track.querySelectorAll('.marquee__set')).forEach(function (s, i) {
+          if (i > 0) s.remove();
+        });
         // enough copies to cover the viewport plus the one that scrolls off
-        var copies = Math.max(2, Math.ceil((m.getBoundingClientRect().width + step) / step) + 1);
+        var copies = Math.max(2, Math.ceil((viewWidth + step) / step) + 1);
         for (var i = 1; i < copies; i++) {
           var clone = set.cloneNode(true);
           clone.setAttribute('aria-hidden', 'true');
@@ -1078,15 +1122,13 @@ h1,h2,h3,h4,p{margin:0}
       }
 
       build();
-      var t;
-      var lastWidth = window.innerWidth;
+      // Width only: a height-only resize is the mobile URL bar, not a relayout.
+      var lastWidth = window.innerWidth, t;
       window.addEventListener('resize', function () {
-        var currentWidth = window.innerWidth;
-        if (currentWidth !== lastWidth) {
-          lastWidth = currentWidth;
-          clearTimeout(t);
-          t = setTimeout(build, 200);
-        }
+        if (window.innerWidth === lastWidth) return;
+        lastWidth = window.innerWidth;
+        clearTimeout(t);
+        t = setTimeout(build, 200);
       });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
     });

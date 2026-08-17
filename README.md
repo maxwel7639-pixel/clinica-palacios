@@ -41,6 +41,17 @@ var CONFIG = {
 
 Todos os botões “Agendar”, o botão flutuante e os links do rodapé usam esses valores.
 
+Cada card de tratamento tem o seu próprio botão **“Agendar sessão”**, que abre o WhatsApp
+com uma mensagem já citando aquele serviço. O texto fica no atributo `data-wa-msg` do
+próprio card, no `index.html` — para mudar, basta editar a frase ali:
+
+```html
+<article class="card" data-tilt data-wa-msg="Olá! … gostaria de agendar uma avaliação de estética facial…">
+```
+
+O número usado é sempre o do `CONFIG` acima, então trocar o telefone num lugar só atualiza
+os 11 cards junto com o resto do site.
+
 ## Fotos
 
 Cada espaço de imagem aponta para um arquivo com nome fixo. **Basta salvar o arquivo com o
