@@ -126,6 +126,12 @@ h1,h2,h3,h4,p{margin:0}
 .marquee.is-measuring .marquee__set,
 .marquee.is-running .marquee__set{justify-content:flex-start;flex-wrap:nowrap;row-gap:0}
 .marquee.is-running .marquee__track{animation:marquee var(--marquee-duration) linear infinite}
+/* Pausa só onde existe ponteiro de verdade. No toque o :hover fica "grudado"
+   depois do tap e a faixa pararia sozinha. */
+@media(hover:hover) and (pointer:fine){
+  .marquee:hover .marquee__track{animation-play-state:paused}
+}
+.marquee:focus-within .marquee__track{animation-play-state:paused}
 @keyframes marquee{to{transform:translate3d(calc(-1 * var(--marquee-distance)),0,0)}}
 .marquee__set .stat{flex:0 0 auto;position:relative}
 /* losango separador entre os itens */
